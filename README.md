@@ -4,7 +4,7 @@
 * [Getting Started](#getting-started)
    * [Prerequisites](#prerequisites)
    * [Installation](#installation)
-* [Getting started with tests](#getting-started-with-tests)
+   * [Getting started with tests](#getting-started-with-tests)
 * [Coding Style](#coding-style)
 * [Deployment](#deployment)
 * [Contributing](#contributing)
@@ -67,6 +67,9 @@ Once all the necessary programs are installed on your local machine, you may the
  3. The third way is by doing it directly from within Xcode. This can be done by accessing the "Source Control" meny, and choosing the "Pull Request" option. 
  
 Once the project is on your machine, you must navigate to the downloaded folder and run the "LoginV1.xcodeproj" file. This will open up the project directly on Xcode. Afterwards you must run the project in order for it to compile, and test to see if everything builds correctly. 
+
+#### Getting started with tests
+Currently, an Ad-hoc testing appraoch was mainly used throughout the development of our project. We require contributors to help us create unit testing functions. Please refer to our [Wiki!](https://github.com/maghov/IS-213/wiki) page for an introduction guide on how you can get started by creating your own unit tests. 
 
 ## Coding Style
 
