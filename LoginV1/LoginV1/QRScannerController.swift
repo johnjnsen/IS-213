@@ -2,19 +2,19 @@
 //  QRScannerController.swift
 //  QRCodeReader
 //
-//  Created by Simon Ng on 13/10/2016.
-//  Copyright © 2016 AppCoda. All rights reserved.
 //
 
 import UIKit
 import AVFoundation
+
+var qRCode = String()
 
 class QRScannerController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     var captureSession:AVCaptureSession?
     var videoPreviewLayer:AVCaptureVideoPreviewLayer?
     var qrCodeFrameView:UIView?
-
+    
     @IBOutlet var messageLabel:UILabel!
     @IBOutlet var topbar: UIView!
     
@@ -81,7 +81,7 @@ class QRScannerController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
             
         } catch {
             
-            // If any error occurs, simply print it out and don't continue any more.
+            // If any error occurs, print it out.
             print(error)
             return
         }
@@ -90,6 +90,36 @@ class QRScannerController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    
+    func createAlertQR(title: String, message: String) {
+        
+        let alertQR = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        
+        alertQR.addAction(UIAlertAction(title: "Bekreft", style: UIAlertActionStyle.default, handler: { (action) in
+            alertQR.dismiss(animated: true, completion: nil)
+           if qRCode == "47 107" {
+            self.confirmBook()
+            }
+           else {
+            print("Feil QR-kode.")
+                }
+            
+             }))
+        
+        self.present(alertQR, animated: true, completion: nil)
+        
+    }
+    
+  
+    func confirmBook(){
+        
+        performSegue(withIdentifier: "segueNew", sender: self)
+    }
+
+
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
@@ -102,14 +132,15 @@ class QRScannerController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         
         // Get the metadata object.
         let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        
         if metadataObj.type == AVMetadataObjectTypeQRCode {
             // If the found metadata is equal to the QR code metadata then update the status label's text and set the bounds
             let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
+            
             if metadataObj.stringValue != nil {
                 messageLabel.text = metadataObj.stringValue
+
             }
         }
             // Check if the metadataObjects array is not nil and it contains at least one object.
@@ -124,9 +155,12 @@ class QRScannerController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
                 // If the found metadata is equal to the QR code metadata then update the status label's text and set the bounds
                 let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
                 qrCodeFrameView?.frame = barCodeObject!.bounds
-                
+                createAlertQR(title: "Bekreft rom?", message: "")
+                qRCode = metadataObj.stringValue
+                print (metadataObj.stringValue)
                 if metadataObj.stringValue != nil {
                     messageLabel.text = metadataObj.stringValue
+
             }
         }
     }

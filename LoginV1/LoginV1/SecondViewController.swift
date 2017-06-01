@@ -15,11 +15,30 @@ var myIndex = Int()
 
 class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    
+    @IBOutlet weak var viewDropDownMenu: UIView!
     @IBOutlet weak var textFieldSpace: UITextField!
     @IBOutlet weak var textFieldName: UITextField!
     @IBOutlet weak var textFieldDetails: UITextField!
     @IBOutlet weak var tblRooms: UITableView!
+    
+    @IBAction func showDropDownMenu(_ sender: UIBarButtonItem) {
+        if (viewDropDownMenu.isHidden == true){
+            viewDropDownMenu.isHidden = false
+        }
+        else if (viewDropDownMenu.isHidden == false){
+            viewDropDownMenu.isHidden = true
+        }
+    }
+    
+    @IBAction func logoutButtonPressed(_ sender: UIButton) {
+        try! FIRAuth.auth()?.signOut()
+        performSegue(withIdentifier: "SegueChooseRoomToLogin", sender: self)
+    }
+    
+    
+    
+    
+    
     @IBAction func buttonAddRoom(_ sender: UIButton) {
         addRoom()
     }
@@ -39,6 +58,7 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as!ViewControllerTableViewCell
         
         let room: RoomModel
@@ -67,7 +87,8 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        viewDropDownMenu.isHidden = true
+        
         refRooms = FIRDatabase.database().reference().child("list")
         
         refRooms.observe(FIRDataEventType.value, with:{(snapshot) in
@@ -88,6 +109,11 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     let toTre = roomObject? ["toTre"]
                     let treFire = roomObject? ["treFire"]
                     let booketAvTiElleve = roomObject? ["booketAvTiElleve"]
+                    let booketAvElleveTolv = roomObject? ["booketAvElleveTolv"]
+                    let booketAvTolvEtt = roomObject? ["booketAvTolvEtt"]
+                    let booketAvEttTo = roomObject? ["booketAvEttTo"]
+                    let booketAvToTre = roomObject? ["booketAvToTre"]
+                    let booketAvTreFire = roomObject? ["booketAvTreFire"]
                     
                     let room = RoomModel(id: id as! String?,
                                          name: name as! String?,
@@ -99,7 +125,12 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                          ettTo: ettTo as! String?,
                                          toTre: toTre as! String?,
                                          treFire: treFire as! String?,
-                                         booketAvTiElleve: booketAvTiElleve as! String?)
+                                         booketAvTiElleve: booketAvTiElleve as! String?,
+                                         booketAvElleveTolv: booketAvElleveTolv as! String?,
+                                         booketAvTolvEtt: booketAvTolvEtt as! String?,
+                                         booketAvEttTo: booketAvEttTo as! String?,
+                                         booketAvToTre: booketAvToTre as! String?,
+                                         booketAvTreFire: booketAvTreFire as! String?)
                     roomList.append(room)
                     
                     

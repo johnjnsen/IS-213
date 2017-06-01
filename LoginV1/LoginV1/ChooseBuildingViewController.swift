@@ -1,20 +1,20 @@
 //
-//  FirstViewController.swift
-//  RoomBooking3
+//  ChooseBuildingViewController.swift
+//  LoginV1
 //
-//  Created by Magnus Høvik on 18.04.2017.
-//  Copyright © 2017 Magnus Høvik. All rights reserved.
+//  Created by Magnus Høvik on 30.05.2017.
+//  Copyright © 2017 eoliversen. All rights reserved.
 //
 
 import UIKit
-//import Fvarbase
-import FirebaseAuth
+import Firebase
 
-class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-   
-    @IBOutlet weak var buttonLogOut: UIButton!
+
+class ChooseBuildingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var viewDropDownMenu: UIView!
     
+let buildingList = ["Bygg 47", "Bygg 48", "Bygg 49", "Bygg 50", "Bygg 51"]
+
     @IBAction func showDropDownMenu(_ sender: UIBarButtonItem) {
         if (viewDropDownMenu.isHidden == true){
             viewDropDownMenu.isHidden = false
@@ -22,48 +22,45 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         else if (viewDropDownMenu.isHidden == false){
             viewDropDownMenu.isHidden = true
         }
-        
     }
     
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
         try! FIRAuth.auth()?.signOut()
-        performSegue(withIdentifier: "segueMainToLogin", sender: self)
-
-        
+        performSegue(withIdentifier: "seguechooseBuildingToLogin", sender: self)
     }
-    
-    
-    
-let bookingList = ["Bygg 47 Rom 105 Mandag kl 11-12", "Bygg 47 Rom 105 Tirsdag kl 11-12"]
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          return bookingList.count
+        
+        return buildingList.count
     }
+    
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let yourBookings = UITableViewCell (style: UITableViewCellStyle.default, reuseIdentifier: "yourBookings")
-        yourBookings.textLabel?.text = bookingList[indexPath.row]
-        return yourBookings
+        
+        let buildingCell = UITableViewCell (style: UITableViewCellStyle.default, reuseIdentifier: "buildingCell")
+        buildingCell.textLabel?.text = buildingList[indexPath.row]
+        return buildingCell
     }
     
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "segueBuildingToRoom" , sender: self)
+    }
+
 
     
     
-   
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDropDownMenu.isHidden = true
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 
 }
-
